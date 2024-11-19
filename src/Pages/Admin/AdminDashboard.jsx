@@ -2,8 +2,6 @@ import Sidebar from "../../Components/Admin/Common/Sidebar";
 import DashboardCards from "../../Components/Admin/Dashboard/DashboardCards";
 
 export default function AdminDashboard() {
-  console.log("OH");
-
   return (
     <div className="bg-gray-100 min-h-screen flex">
       <Sidebar />

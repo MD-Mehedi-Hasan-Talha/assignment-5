@@ -1,8 +1,12 @@
 import Avatar from "../../../assets/avater.webp";
 import LogoWhite from "../../../assets/logo-white.svg";
+import useAuth from "../../../Hooks/useAuth";
 import Logout from "./Logout";
 
 export default function Sidebar() {
+  const { handleGetAuth } = useAuth();
+  const auth = handleGetAuth();
+
   return (
     <aside className="w-64 bg-primary p-6 flex flex-col">
       <div className="mb-10">
@@ -57,7 +61,9 @@ export default function Sidebar() {
           alt="Mr Hasan"
           className="w-10 h-10 rounded-full mr-3 object-cover"
         />
-        <span className="text-white font-semibold">Saad Hasan</span>
+        <span className="text-white font-semibold">
+          {auth?.user?.full_name}
+        </span>
       </div>
     </aside>
   );

@@ -14,7 +14,6 @@ import Signup from "./Pages/Signup";
 import AuthProvider from "./Providers/AuthProvider";
 import AdminRoute from "./Routes/AdminRoute";
 import PrivateRoute from "./Routes/PrivateRoute";
-import PublicRoute from "./Routes/PublicRoute.";
 
 export default function App() {
   const location = useLocation();
@@ -34,10 +33,10 @@ export default function App() {
               <Route path="/result" element={<Result />} />
               <Route path="/leaderboard/:quizId" element={<Leaderboard />} />
             </Route>
-            <Route element={<PublicRoute />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-            </Route>
+            {/* <Route element={<PublicRoute />}> */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            {/* </Route> */}
           </Routes>
         </AnimatePresence>
       </AuthProvider>

@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import AdminQuizProvider from "../Providers/AdminQuizProvider";
 
 export default function PrivateRoute() {
   const { handleGetAuth, isLoading } = useAuth();
@@ -13,7 +14,9 @@ export default function PrivateRoute() {
   return (
     <>
       {auth?.user?.role?.toLowerCase() === "admin" ? (
-        <Outlet />
+        <AdminQuizProvider>
+          <Outlet />
+        </AdminQuizProvider>
       ) : (
         <Navigate to="/login" />
       )}

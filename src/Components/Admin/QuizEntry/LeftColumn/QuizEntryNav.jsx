@@ -16,7 +16,7 @@ export default function QuizEntryNav() {
         </li>
         <li>
           <Link
-            to="/create"
+            to="/dashboard"
             className="text-gray-600 hover:text-buzzr-purple"
             aria-current="page"
           >
