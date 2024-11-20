@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import BackArrow from "../Icons/BackArrow";
 import CreateForm from "./CreateForm";
 
 export default function QuizCreate() {
+  const location = useLocation();
+  const data = location?.state;
+
   return (
     <div>
       <Link
@@ -17,7 +20,7 @@ export default function QuizCreate() {
         Give your quiz title and description
       </h2>
 
-      <CreateForm />
+      <CreateForm data={data} />
     </div>
   );
 }

@@ -54,7 +54,7 @@ export default function LoginForm() {
             refreshToken: data.tokens.refreshToken,
           });
           showToastMessage("You've successfully logged in.", "success");
-          navigate("/home");
+          navigate("/");
         }
       }
     } catch (err) {

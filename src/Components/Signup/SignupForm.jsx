@@ -45,7 +45,7 @@ export default function SignupForm() {
 
       if (response.status === 201) {
         showToastMessage("You've successfully registered.", "success");
-        showToastMessage("Please login for access quiz.", "info");
+        showToastMessage("Please login for access application.", "info");
         //
         resetField("full_name");
         resetField("email");

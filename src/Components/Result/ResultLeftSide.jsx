@@ -12,7 +12,7 @@ export default function ResultLeftSide({ questions, result, quiz }) {
   useEffect(() => {
     let tempTotal = 0;
     for (let i = 0; i < questions.length; i++) {
-      if (questions[i].correctAnswer === result.submitted_answers[i].answer)
+      if (questions[i]?.correctAnswer === result?.submitted_answers[i]?.answer)
         tempTotal++;
     }
     setTotalCorrect(tempTotal);

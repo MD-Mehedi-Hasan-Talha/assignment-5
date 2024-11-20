@@ -40,24 +40,25 @@ export const adminQuizReducer = (state, action) => {
       };
     }
 
-    // case actions.quiz.QUIZ_DATA_EDITED: {
-    //     return {
-    //         ...state,
-    //         loading: false,
-    //         user: action.data,
-    //     };
-    // }
+    case actions.quiz.QUIZ_DATA_EDITED: {
+      const updatedQuiz = state.quizzes.map((quiz) =>
+        quiz.id === action.data.id ? action.data : quiz
+      );
 
-    // case actions.quiz.QUIZ_DATA_DELETED: {
-    //     return {
-    //         ...state,
-    //         loading: false,
-    //         user: {
-    //             ...state.user,
-    //             avatar: action.data.avatar,
-    //         },
-    //     };
-    // }
+      return {
+        ...state,
+        loading: false,
+        quizzes: updatedQuiz,
+      };
+    }
+
+    case actions.quiz.QUIZ_DATA_DELETED: {
+      return {
+        ...state,
+        loading: false,
+        quizzes: state.quizzes.filter((item) => item.id !== action.data.id),
+      };
+    }
 
     case actions.question.QUESTION_FETCHED: {
       return {
@@ -70,6 +71,17 @@ export const adminQuizReducer = (state, action) => {
       return {
         ...state,
         questions: [...state.questions, action.data],
+      };
+    }
+
+    case actions.question.QUESTION_EDITED: {
+      const updatedQuestions = state.questions.map((question) =>
+        question.id === action.data.id ? action.data : question
+      );
+
+      return {
+        ...state,
+        questions: updatedQuestions,
       };
     }
 

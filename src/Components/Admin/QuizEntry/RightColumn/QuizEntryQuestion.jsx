@@ -1,10 +1,14 @@
 import { actions } from "../../../../Actions/Index";
 import useAdminQuiz from "../../../../Hooks/useAdminQuiz";
 import useAxios from "../../../../Hooks/useAxios";
+import useQuizForm from "../../../../Hooks/useQuizForm";
+import createFourElementArray from "../../../../utils/createFourElementArray";
+import showToastMessage from "../../../../utils/showToastMessage";
 
 export default function QuizEntryQuestion({ question, questionNo }) {
   const { api } = useAxios();
   const { dispatch } = useAdminQuiz();
+  const { setQuizForm } = useQuizForm();
 
   const handleDeleteQuestion = async (questionId) => {
     if (confirm("Are you sure you want to delete this question?")) {
@@ -20,6 +24,7 @@ export default function QuizEntryQuestion({ question, questionNo }) {
             type: actions.question.QUESTION_DELETED,
             data: { questionId },
           });
+          showToastMessage("Question has been deleted.", "success");
         }
       } catch (err) {
         console.log(err);
@@ -27,12 +32,31 @@ export default function QuizEntryQuestion({ question, questionNo }) {
     }
   };
 
+  const handleEditQuestion = () => {
+    const options = createFourElementArray(question?.options);
+
+    const nextData = {
+      question: question.question,
+      options,
+      correctAnswer: {
+        index: question?.options?.findIndex(
+          (item) => item === question?.correctAnswer
+        ),
+        answer: question?.correctAnswer,
+      },
+      isEdit: true,
+      id: question.id,
+    };
+
+    setQuizForm(nextData);
+  };
+
   return (
     <div className="rounded-lg overflow-hidden shadow-sm mb-4">
       <div className="bg-white p-6 !pb-2">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">
-            {questionNo}. {question.question}
+            {questionNo}. {question?.question}
           </h3>
         </div>
         <div className="space-y-2">
@@ -56,7 +80,10 @@ export default function QuizEntryQuestion({ question, questionNo }) {
         >
           Delete
         </button>
-        <button className="text-primary hover:text-primary/80 font-medium">
+        <button
+          className="text-primary hover:text-primary/80 font-medium"
+          onClick={handleEditQuestion}
+        >
           Edit Question
         </button>
       </div>

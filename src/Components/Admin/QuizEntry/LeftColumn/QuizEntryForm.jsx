@@ -2,49 +2,41 @@ import { useState } from "react";
 import { actions } from "../../../../Actions/Index";
 import useAdminQuiz from "../../../../Hooks/useAdminQuiz";
 import useAxios from "../../../../Hooks/useAxios";
+import useQuizForm from "../../../../Hooks/useQuizForm";
+import showToastMessage from "../../../../utils/showToastMessage";
 import Loading from "../../../Icons/Loading";
 import AnswerOption from "./AnswerOption";
 
-//TODO: যদি কারেক্ট উত্তর সিলেক্ট করে ওই অপশনের ভ্যালু পরিবর্তন করা হয় তাহলে ওইটা আবার আনচেক হয়ে যাচ্ছে।
-
 export default function QuizEntryForm({ quizSet }) {
-  const [question, setQuestion] = useState({
-    question: "",
-    options: ["", "", "", ""],
-    correctAnswer: {
-      index: null,
-      answer: null,
-    },
-  });
+  const { quizForm, setQuizForm } = useQuizForm();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { dispatch } = useAdminQuiz();
-
   const { api } = useAxios();
 
   const handleOption = (value, index) => {
-    const nextOption = [...question.options];
+    const nextOption = [...quizForm.options];
     nextOption[index] = value;
-    setQuestion({
-      ...question,
+    setQuizForm({
+      ...quizForm,
       options: nextOption,
     });
   };
 
   const handleCorrectAnswer = (value, index) => {
-    if (question.correctAnswer.index === index) {
-      setQuestion({
-        ...question,
+    if (quizForm.correctAnswer.index === index) {
+      setQuizForm({
+        ...quizForm,
         correctAnswer: {
           index: null,
           answer: null,
         },
       });
     } else {
-      setQuestion({
-        ...question,
+      setQuizForm({
+        ...quizForm,
         correctAnswer: {
           index,
           answer: value,
@@ -57,9 +49,9 @@ export default function QuizEntryForm({ quizSet }) {
     setError(null);
 
     const questionValidation = {
-      question: question.question.trim(),
-      options: question.options.filter((option) => option.trim() !== ""),
-      correctAnswer: question.correctAnswer.answer || null,
+      question: quizForm.question.trim(),
+      options: quizForm.options.filter((option) => option.trim() !== ""),
+      correctAnswer: quizForm.options[quizForm.correctAnswer.index] || null,
     };
 
     if (!questionValidation.question) {
@@ -88,24 +80,40 @@ export default function QuizEntryForm({ quizSet }) {
 
     try {
       setLoading(true);
-      const response = await api.post(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/admin/quizzes/${
-          quizSet?.id
-        }/questions`,
-        questionValidation
-      );
-      dispatch({
-        type: actions.question.QUESTION_ADDED,
-        data: response.data?.data,
-      });
-
-      setQuestion({
+      if (quizForm.isEdit) {
+        const response = await api.patch(
+          `${import.meta.env.VITE_SERVER_BASE_URL}/api/admin/questions/${
+            quizForm.id
+          }`,
+          questionValidation
+        );
+        dispatch({
+          type: actions.question.QUESTION_EDITED,
+          data: response.data?.data,
+        });
+        showToastMessage("Question has been updated.", "success");
+      } else {
+        const response = await api.post(
+          `${import.meta.env.VITE_SERVER_BASE_URL}/api/admin/quizzes/${
+            quizSet?.id
+          }/questions`,
+          questionValidation
+        );
+        dispatch({
+          type: actions.question.QUESTION_ADDED,
+          data: response.data?.data,
+        });
+        showToastMessage("Question is created.", "success");
+      }
+      setQuizForm({
         question: "",
         options: ["", "", "", ""],
         correctAnswer: {
           index: null,
           answer: null,
         },
+        isEdit: false,
+        id: null,
       });
     } catch (err) {
       console.log(err);
@@ -133,9 +141,9 @@ export default function QuizEntryForm({ quizSet }) {
             error?.type === "title" && "border-red-600"
           }`}
           placeholder="Enter quiz title"
-          value={question.question}
+          value={quizForm.question}
           onChange={(e) =>
-            setQuestion({ ...question, question: e.target.value })
+            setQuizForm({ ...quizForm, question: e.target.value })
           }
         />
         {error?.type === "title" && (
@@ -146,7 +154,7 @@ export default function QuizEntryForm({ quizSet }) {
       <p className="text-sm text-gray-600 mt-4">Add Options</p>
 
       <div id="optionsContainer" className="space-y-2 mt-4">
-        {question.options?.map((item, index) => (
+        {quizForm.options?.map((item, index) => (
           <AnswerOption
             key={index}
             label={`Option ${index + 1}`}
@@ -154,7 +162,7 @@ export default function QuizEntryForm({ quizSet }) {
             answer={item}
             onChangeOption={(value) => handleOption(value, index)}
             onCorrectAnswer={handleCorrectAnswer}
-            isCorrect={question.correctAnswer}
+            isCorrect={quizForm.correctAnswer}
           />
         ))}
         {(error?.type === "option" || error?.type === "correctAns") && (
@@ -167,7 +175,7 @@ export default function QuizEntryForm({ quizSet }) {
         disabled={loading}
       >
         {loading && <Loading />}
-        Save Quiz
+        {quizForm.isEdit ? "Update Quiz" : "Save Quiz"}
       </button>
     </div>
   );

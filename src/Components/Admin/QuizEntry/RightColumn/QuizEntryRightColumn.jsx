@@ -6,8 +6,8 @@ export default function QuizEntryRightColumn() {
 
   return (
     <div className="px-4">
-      {state.questions.length > 0 &&
-        state.questions.map((question, index) => (
+      {state?.questions?.length > 0 &&
+        state?.questions?.map((question, index) => (
           <QuizEntryQuestion
             key={question.id}
             question={question}
