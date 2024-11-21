@@ -4,6 +4,7 @@ import LogoWhite from "../assets/logo-white.svg";
 import ResultLeftSide from "../Components/Result/ResultLeftSide";
 import ResultRightSide from "../Components/Result/ResultRightSide";
 import useAxios from "../Hooks/useAxios";
+import showToastMessage from "../utils/showToastMessage";
 
 export default function Result() {
   const { api, loading: axiosLoading } = useAxios();
@@ -26,7 +27,7 @@ export default function Result() {
         setQuestions(response.data.data.questions);
         setQuiz(response.data.data);
       } catch (error) {
-        console.log(error);
+        showToastMessage(error.message, "error");
       } finally {
         setLoading(false);
       }

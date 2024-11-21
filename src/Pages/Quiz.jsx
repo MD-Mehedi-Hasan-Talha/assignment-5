@@ -82,7 +82,7 @@ export default function Quiz() {
           navigate("/result", { state: response.data });
         }
       } catch (err) {
-        console.log(err);
+        showToastMessage(err.message, "error");
       }
     }
   };

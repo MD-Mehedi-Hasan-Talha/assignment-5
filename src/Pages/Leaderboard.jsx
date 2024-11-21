@@ -6,6 +6,7 @@ import LeaderBoardLeftColumn from "../Components/LeaderBoard/LeaderBoardLeftColu
 import LeaderBoardRightColumn from "../Components/LeaderBoard/LeaderBoardRightColumn";
 import useAxios from "../Hooks/useAxios";
 import { leaderboardDataCustomizer } from "../utils/leaderboardDataCustomizer";
+import showToastMessage from "../utils/showToastMessage";
 
 export default function Leaderboard() {
   const [leaderBoardData, setLeaderBoardData] = useState(null);
@@ -31,7 +32,7 @@ export default function Leaderboard() {
           stats: response?.data?.data?.stats,
         });
       } catch (error) {
-        console.error(error);
+        showToastMessage(error.message, "error");
       }
     };
 

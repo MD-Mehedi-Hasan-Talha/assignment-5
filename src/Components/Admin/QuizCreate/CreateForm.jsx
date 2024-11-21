@@ -66,7 +66,7 @@ export default function CreateForm({ data }) {
         showToastMessage("Quiz is created.", "success");
       }
     } catch (err) {
-      console.log(err);
+      showToastMessage(err.message, "error");
     } finally {
       setLoading(false);
     }

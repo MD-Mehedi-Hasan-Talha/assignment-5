@@ -41,7 +41,7 @@ export default function QuizEntryNav({ data }) {
         );
       }
     } catch (err) {
-      console.log(err);
+      showToastMessage(err.message, "error");
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ export default function QuizEntryNav({ data }) {
           navigate("/dashboard");
         }
       } catch (err) {
-        console.log(err);
+        showToastMessage(err.message, "error");
       }
     }
   };

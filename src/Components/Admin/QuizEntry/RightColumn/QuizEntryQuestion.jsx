@@ -27,7 +27,7 @@ export default function QuizEntryQuestion({ question, questionNo }) {
           showToastMessage("Question has been deleted.", "success");
         }
       } catch (err) {
-        console.log(err);
+        showToastMessage(err.message, "error");
       }
     }
   };

@@ -18,16 +18,20 @@ export default function LeaderBoardLeftColumn({ leaderBoardData }) {
           className="w-20 h-20 rounded-full border-4 border-white mb-4 object-cover"
         />
         <h2 className="text-2xl font-bold">{auth?.user?.full_name}</h2>
-        <p className="text-xl">{userData?.rank} Position</p>
+        <p className="text-xl">
+          {userData?.rank
+            ? userData?.rank + "Position"
+            : "You haven't any position."}
+        </p>
       </div>
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="text-center">
           <p className="text-sm opacity-75">Mark</p>
-          <p className="text-2xl font-bold">{userData?.totalMark}</p>
+          <p className="text-2xl font-bold">{userData?.totalMark || 0}</p>
         </div>
         <div className="text-center">
           <p className="text-sm opacity-75">Correct</p>
-          <p className="text-2xl font-bold">{userData?.totalCorrect}</p>
+          <p className="text-2xl font-bold">{userData?.totalCorrect || 0}</p>
         </div>
         <div className="text-center">
           <p className="text-sm opacity-75">Wrong</p>

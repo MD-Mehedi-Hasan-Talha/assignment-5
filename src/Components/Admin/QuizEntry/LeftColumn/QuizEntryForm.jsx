@@ -116,7 +116,7 @@ export default function QuizEntryForm({ quizSet }) {
         id: null,
       });
     } catch (err) {
-      console.log(err);
+      showToastMessage(err.message, "error");
     } finally {
       setLoading(false);
     }
