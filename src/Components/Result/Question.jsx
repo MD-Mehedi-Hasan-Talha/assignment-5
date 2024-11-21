@@ -30,7 +30,17 @@ export default function Question({ question, questionNo, result }) {
                   checked={answer?.answer === option}
                   readOnly
                 />
-                <span>{option}</span>
+                <span className="w-full flex items-center justify-between">
+                  {option}{" "}
+                  {question.correctAnswer === option &&
+                  answer?.answer === option ? (
+                    <span className="text-xl">🗹</span>
+                  ) : answer?.answer === option ? (
+                    <span className="text-xl">✘</span>
+                  ) : (
+                    ""
+                  )}
+                </span>
               </label>
             ))}
         </div>

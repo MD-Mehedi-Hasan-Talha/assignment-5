@@ -17,7 +17,7 @@ export default function ResultRightSide({ result, questions }) {
       }}
       className="max-h-screen md:w-1/2 flex items-center justify-center h-full p-8"
     >
-      <div className="h-[calc(100vh-50px)] overflow-y-scroll ">
+      <div className="w-full h-[calc(100vh-50px)] overflow-y-scroll">
         <div className="px-4">
           {questions.length > 0 &&
             questions.map((question, index) => (

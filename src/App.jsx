@@ -23,6 +23,9 @@ export default function App() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
             <Route element={<AdminRoute />}>
               <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/create" element={<AdminQuizCreate />} />
@@ -33,10 +36,6 @@ export default function App() {
               <Route path="/result" element={<Result />} />
               <Route path="/leaderboard/:quizId" element={<Leaderboard />} />
             </Route>
-            {/* <Route element={<PublicRoute />}> */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            {/* </Route> */}
           </Routes>
         </AnimatePresence>
       </AuthProvider>

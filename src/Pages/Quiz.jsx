@@ -6,6 +6,7 @@ import Header from "../Components/Common/Header";
 import LeftColumn from "../Components/Quiz/LeftColumn";
 import RightColumn from "../Components/Quiz/RightColumn";
 import useAxios from "../Hooks/useAxios";
+import showToastMessage from "../utils/showToastMessage";
 
 export default function Quiz() {
   const { quizId } = useParams();
@@ -50,15 +51,23 @@ export default function Quiz() {
     });
   };
 
-  const handleNextQuestion = () => {
-    setQuestionSet((prevQuestionSet) => prevQuestionSet + 1);
+  const handleNextQuestion = (question) => {
+    if (answers[question.id]) {
+      setQuestionSet((prevQuestionSet) => prevQuestionSet + 1);
+    } else {
+      showToastMessage("You must check a question.", "warning");
+    }
   };
 
   const handlePrevQuestion = () => {
     setQuestionSet((prevQuestionSet) => prevQuestionSet - 1);
   };
 
-  const handleSubmitAnswer = async () => {
+  const handleSubmitAnswer = async (question) => {
+    if (!answers[question.id]) {
+      return showToastMessage("You must check a question.", "warning");
+    }
+
     if (confirm("Are you sure you want to submit this quiz?")) {
       try {
         const response = await api.post(
