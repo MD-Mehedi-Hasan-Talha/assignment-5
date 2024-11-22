@@ -54,10 +54,15 @@ export default function Cards() {
         }
       }
     }
+
     if (!axiosLoading) {
       fetchAdminQuiz();
     }
-  }, [api, auth?.user.role, axiosLoading]);
+
+    if (!auth) {
+      setAdminQuiz([]);
+    }
+  }, [api, auth, axiosLoading]);
 
   if (isLoading) {
     return (

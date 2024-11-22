@@ -10,40 +10,46 @@ import Arrow from "../../Icons/Arrow";
 export default function QuizEntryNav({ data }) {
   const [loading, setLoading] = useState(false);
   const { api } = useAxios();
-  const { dispatch } = useAdminQuiz();
+  const { state, dispatch } = useAdminQuiz();
   const navigate = useNavigate();
 
   const handlePublish = async () => {
-    try {
-      setLoading(true);
-      const bodyData = {
-        status: data?.status === "draft" ? "published" : "draft",
-        title: data?.title,
-        description: data?.description,
-      };
+    if (state?.questions?.length > 0) {
+      try {
+        setLoading(true);
+        const bodyData = {
+          status: data?.status === "draft" ? "published" : "draft",
+          title: data?.title,
+          description: data?.description,
+        };
 
-      const response = await api.patch(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/admin/quizzes/${data?.id}`,
-        bodyData
-      );
-
-      if (response.data?.status === "success") {
-        dispatch({
-          type: actions.quiz.QUIZ_DATA_EDITED,
-          data: response.data?.data,
-        });
-        data.status = data?.status === "draft" ? "published" : "draft";
-        showToastMessage(
-          data?.status === "draft"
-            ? "This quiz is unpublished."
-            : "This quiz has been published.",
-          "success"
+        const response = await api.patch(
+          `${import.meta.env.VITE_SERVER_BASE_URL}/api/admin/quizzes/${
+            data?.id
+          }`,
+          bodyData
         );
+
+        if (response.data?.status === "success") {
+          dispatch({
+            type: actions.quiz.QUIZ_DATA_EDITED,
+            data: response.data?.data,
+          });
+          data.status = data?.status === "draft" ? "published" : "draft";
+          showToastMessage(
+            data?.status === "draft"
+              ? "This quiz is unpublished."
+              : "This quiz has been published.",
+            "success"
+          );
+        }
+      } catch (err) {
+        showToastMessage(err.message, "error");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      showToastMessage(err.message, "error");
-    } finally {
-      setLoading(false);
+    } else {
+      showToastMessage("Quiz must have at least one question.", "warning");
     }
   };
 
